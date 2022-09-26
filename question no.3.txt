@@ -1,0 +1,33 @@
+use emp;
+
+db.createCollection("empl");
+
+db.empl.insertMany([
+{no:1,name:"ST",salary:2000,role:"OB"},
+{no:2,name:"MSD",salary:1500,role:"WK"},
+{no:3,name:"YS",salary:1000,role:"ALR"},
+{no:4,name:"RD",salary:1000,role:"MOB"},
+{no:5,name:"RS",salary:500,role:"OB"},
+{no:6,name:"BK",salary:500,role:"MOB"},
+{no:7,name:"VK",salary:300,role:"BW"},
+{no:8,name:"JB",salary:400,role:"BW"},
+{no:9,name:"HP",salary:400,role:"ALR"},
+{no:10,name:"VS",salary:300,role:"OB"}]);
+ 
+db.empl.find().pretty();
+db.empl.updateMany({name:"ST"},{$inc:{salary:8000}});
+db.empl.updateMany({},{$inc:{salary:4000}});
+db.empl.updateMany({"name":"ST"},{$set:{"role":"C and WK"}});
+db.empl.updateMany({"name":"RS"},{$set:{"remark":"WC"}});
+db.empl.update({no:11},{$set:{no:11,name:"AK",salary:10000,role:"coch"}},{upsert:true});
+db.empl.update({name:"RD"},{$unset:{remark:"WC"}});
+db.empl.update({name:"RD"},{$mul:{salary:2}});
+db.empl.find({name:/^S/});
+db.empl.find({name:/^R/});
+db.empl.find({name:/K$/});
+db.empl.find({name:/D$/});
+db.empl.find({name:/S/});
+db.empl.find({name:{$regex:"^S"}});
+db.empl.find({name:{$regex:"S",$options:"i"}});
+db.empl.find({role:{$in:["OB","MOB"]}});
+db.empl.find({role:{$nin:["OB","MOB"]}});

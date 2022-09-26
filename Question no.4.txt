@@ -1,0 +1,103 @@
+1.Insert a new student with name: Mary
+
+> db.Student.insert({name: 'Mary'})
+
+2.Insert a new student with name: Madeline and id=2 (integer)
+
+> db.Student.insert({_id: 2,name: 'Madeline'})
+
+
+3.Insert a new student with name: Steve, midterm score of 80 and final score of 100
+Scores should be embedded in a sub-document like this:
+
+scores:
+{
+  midterm: 0,
+  final: 0
+}
+db.Student.insert({name: 'Steve',scores:
+{
+  midterm: 80,
+  final: 100
+}})
+
+4.Finding a document by a student name
+db.Student.find( { name: 'Steve' } )
+
+
+5.Querying embedded attributes:
+Finding all documents by a student midterm scores greater than 75.
+
+db.Student.find({"scores.midterm": {"$gt": 75}})
+
+
+6.AND / OR queries:
+a)Finding all documents by a student midterm scores greater than 75 AND final scores greater than 80.
+
+db.Student.find({$and:[
+{
+"scores.midterm": {"$gt": 75}
+},
+{
+"scores.final": {"$gt": 80}
+}
+]}).pretty();
+
+
+b)Finding all documents by a student midterm scores greater than 75 OR final scores greater than 80.
+db.Student.find({$or:[
+{
+"scores.midterm": {"$gt": 75}
+},
+{
+"scores.final": {"$gt": 80}
+}
+]}).pretty();
+
+7. Find all students that have scored between [50,80) in midterm AND [80,100] in final exam
+db.Student.find({$and:[
+{
+"scores.midterm": {"$in": [50,80]}
+},
+{
+"scores.final": {"$in": [80,100]}
+}
+]}).pretty();
+
+Updating Documents
+===================
+Updating documents has 2 parts. The first one is finding the document(s) we want to update and the second one is modifying their values.
+
+8. REPLACE the first instance of document matching {name:'Rama'} with the new {name:'Ram Raj'} !!!!
+db.Student.updateMany(
+{ "name" : "Rama"},
+{ $set:{"name" : "Ram Raj"}},
+{upsert : true}
+ )
+
+9.Update the student Raju  midterm score to 50 and final score to 100 respectively.
+db.Student.updateMany(
+{ "name" : "Raju"},
+{ $set:{"scores.midterm" : 50,"scores.final" : 100}},
+{upsert : true}
+ )
+
+10.Update the grades of all students to be 90
+db.Student.updateMany(
+{},
+{ $set:{"grades" : 90}},
+{upsert : true}
+ )
+
+
+Deleting documents
+==================
+11. Deleting a whole collection
+db.Student.deleteMany({})
+12. Deleting a single document whose name is 'Raju'
+ db.Student.deleteOne( { "name" : "Raju"})
+
+
+
+13. Delete all students with midterm score less than 80
+db.Student.deleteMany({"scores.midterm": {"$lt": 80}})
